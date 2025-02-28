@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import logo from "../../assets/Logo.svg";
+import logo from "../_assets/Logo.svg";
 import { ArrowRight, Mail, Radio, User } from "lucide-react";
-import { InputField, InputIcon, InputRoot } from "@/app/components/input";
-import Button from "@/app/components/button";
+import { InputField, InputIcon, InputRoot } from "@/app/_components/input";
+import Button from "@/app/_components/button";
 
 // import { useParams } from "next/navigation";
 
