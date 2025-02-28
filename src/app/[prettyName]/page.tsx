@@ -42,7 +42,7 @@ const Page = () => {
                         </p>
                     </div>
                     {/* FORM PARA SE INSCREVER */}
-                    <SubscriptionForm />
+                    <SubscriptionForm title="Inscrição" titleButton="Confirmar" />
                 </div>
             </div>
         </main>
