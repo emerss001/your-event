@@ -1,14 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import logo from "../_assets/Logo.svg";
+import logo from "../../_assets/Logo.svg";
 import { Radio } from "lucide-react";
 import SubscriptionForm from "./components/subscription-form";
-
-// import { useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 const Page = () => {
-    // const params = useParams<{ prettyName: string }>();
+    const params = useParams<{ prettyName: string; indicatorId?: string[] }>();
+
+    if (!params.indicatorId) params.indicatorId = [""];
+
+    console.log(params.prettyName, params.indicatorId[0]);
+
     return (
         <main className="max-w-[1240px] mx-auto px-5 py-8 md:py-0">
             <div className="min-h-dvh flex flex-col justify-center gap-16">
@@ -17,7 +21,7 @@ const Page = () => {
 
                     <h1 className="text-4xl text-center leading-none font-heading font-medium flex flex-col md:text-7xl md:text-start">
                         <span className="text-blue">CodeCraft</span>
-                        Summit 2025
+                        {/* Summit 2025 */} {params.prettyName}
                     </h1>
                 </div>
 

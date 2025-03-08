@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import medalGold from "../../_assets/medal-gold.svg";
-import medalSilver from "../../_assets/medal-silver.svg";
-import medalCooper from "../../_assets/medal-cooper.svg";
+import medalGold from "@/app/_assets/medal-gold.svg";
+import medalSilver from "@/app/_assets/medal-silver.svg";
+import medalCooper from "@/app/_assets/medal-cooper.svg";
 
 const Ranking = () => {
     return (

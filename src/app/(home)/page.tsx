@@ -1,6 +1,6 @@
 import Image from "next/image";
 import logo from "../_assets/Logo.svg";
-import SubscriptionForm from "../[prettyName]/components/subscription-form";
+import SubscriptionForm from "../[prettyName]/[[...indicatorId]]/components/subscription-form";
 import InputEmailForm from "./components/input-email-form";
 
 export default function Home() {

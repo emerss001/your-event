@@ -1,11 +1,19 @@
 import Image from "next/image";
-import logo from "../_assets/Logo.svg";
+import logo from "../../../_assets/Logo.svg";
 import Ranking from "./components/ranking";
 import Stats from "./components/stats";
 import InviteLinkInput from "./components/invite-link-input";
 
-const InvatePage = () => {
-    const inviteLink = "http://yourevent/simposio-if-baiano/587";
+interface InvitePageProps {
+    params: Promise<{
+        prettyName: string;
+        subscriberId: string;
+    }>;
+}
+
+const InvatePage = async (props: InvitePageProps) => {
+    const { subscriberId, prettyName } = await props.params;
+    const inviteLink = `http://localhost:3000/${prettyName}/${subscriberId}`;
 
     return (
         <div className="min-h-dvh flex items-center justify-between gap-16 flex-col md:flex-row">
