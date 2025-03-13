@@ -3,17 +3,29 @@ import logo from "../../../_assets/Logo.svg";
 import Ranking from "./components/ranking";
 import Stats from "./components/stats";
 import InviteLinkInput from "./components/invite-link-input";
-
+import {
+    getClicksToLink,
+    getSubscriptionRankingByEvent,
+    getSubscriptionRankingByUser,
+} from "@/http/your-event-backend";
 interface InvitePageProps {
     params: Promise<{
         prettyName: string;
-        subscriberId: string;
+        subscriberId: number;
     }>;
 }
 
 const InvatePage = async (props: InvitePageProps) => {
     const { subscriberId, prettyName } = await props.params;
     const inviteLink = `http://localhost:3000/${prettyName}/${subscriberId}`;
+
+    // requisições para o backend:
+    const { quantity: numberAcessesToLink } = await getClicksToLink(prettyName, subscriberId);
+    const { item: userRanking, position: positionOfRanking } = await getSubscriptionRankingByUser(
+        prettyName,
+        subscriberId
+    );
+    const ranking = await getSubscriptionRankingByEvent(prettyName);
 
     return (
         <div className="min-h-dvh flex items-center justify-between gap-16 flex-col md:flex-row">
@@ -39,10 +51,14 @@ const InvatePage = async (props: InvitePageProps) => {
                     </div>
 
                     <InviteLinkInput inviteLink={inviteLink} />
-                    <Stats />
+                    <Stats
+                        numberAcessesToLink={numberAcessesToLink}
+                        userRanking={userRanking}
+                        positionOfRanking={positionOfRanking}
+                    />
                 </div>
             </div>
-            <Ranking />
+            <Ranking ranking={ranking} userId={userRanking?.userId} />
         </div>
     );
 };

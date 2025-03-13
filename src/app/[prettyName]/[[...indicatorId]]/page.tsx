@@ -1,17 +1,21 @@
-"use client";
-
 import Image from "next/image";
 import logo from "../../_assets/Logo.svg";
 import { Radio } from "lucide-react";
 import SubscriptionForm from "./components/subscription-form";
-import { useParams } from "next/navigation";
+import { addClickToLink } from "@/http/your-event-backend";
 
-const Page = () => {
-    const params = useParams<{ prettyName: string; indicatorId?: string[] }>();
+interface PageParams {
+    params: Promise<{
+        prettyName: string;
+        indicatorId?: number[];
+    }>;
+}
 
-    if (!params.indicatorId) params.indicatorId = [""];
-
-    console.log(params.prettyName, params.indicatorId[0]);
+const Page = async (props: PageParams) => {
+    const { indicatorId, prettyName } = await props.params;
+    if (indicatorId) {
+        await addClickToLink(prettyName, indicatorId[0]);
+    }
 
     return (
         <main className="max-w-[1240px] mx-auto px-5 py-8 md:py-0">
@@ -21,7 +25,7 @@ const Page = () => {
 
                     <h1 className="text-4xl text-center leading-none font-heading font-medium flex flex-col md:text-7xl md:text-start">
                         <span className="text-blue">CodeCraft</span>
-                        {/* Summit 2025 */} {params.prettyName}
+                        {/* Summit 2025 */} {prettyName}
                     </h1>
                 </div>
 
@@ -46,7 +50,12 @@ const Page = () => {
                         </p>
                     </div>
                     {/* FORM PARA SE INSCREVER */}
-                    <SubscriptionForm title="Inscrição" titleButton="Confirmar" />
+                    <SubscriptionForm
+                        eventPrettyName={prettyName}
+                        indicatorId={indicatorId ? indicatorId[0] : undefined}
+                        title="Inscrição"
+                        titleButton="Confirmar"
+                    />
                 </div>
             </div>
         </main>

@@ -5,299 +5,299 @@
  * OpenAPI spec version: v0
  */
 export interface User {
-  name?: string;
-  email?: string;
+    name?: string;
+    email?: string;
 }
 
 export interface SubscriptionResponse {
-  subscriptionNumber?: number;
-  designation?: string;
+    subscriptionNumber?: number;
+    designation?: string;
 }
 
 export interface ErrorMessage {
-  message?: string;
+    message?: string;
 }
 
 export interface LocalTime {
-  hour?: number;
-  minute?: number;
-  second?: number;
-  nano?: number;
+    hour?: number;
+    minute?: number;
+    second?: number;
+    nano?: number;
 }
 
 export interface NewEventRequest {
-  title?: string;
-  location?: string;
-  price?: number;
-  startDate?: string;
-  endDate?: string;
-  startTime?: LocalTime;
-  endTime?: LocalTime;
-  email?: string;
-  name?: string;
+    title?: string;
+    location?: string;
+    price?: number;
+    startDate?: string;
+    endDate?: string;
+    startTime?: LocalTime;
+    endTime?: LocalTime;
+    email?: string;
+    name?: string;
 }
 
 export interface Event {
-  eventId?: number;
-  title?: string;
-  prettyName?: string;
-  location?: string;
-  price?: number;
-  startDate?: string;
-  endDate?: string;
-  startTime?: LocalTime;
-  endTime?: LocalTime;
+    eventId?: number;
+    title?: string;
+    prettyName?: string;
+    location?: string;
+    price?: number;
+    startDate?: string;
+    endDate?: string;
+    startTime?: LocalTime;
+    endTime?: LocalTime;
 }
 
 export interface SubscriptionRankingItem {
-  subscribers?: number;
-  userId?: number;
-  name?: string;
+    item: {
+        subscribers?: number;
+        userId?: number;
+        name?: string;
+    };
+    position?: number;
+}
+
+export interface SubscriptionRanking {
+    subscribers?: number;
+    userId?: number;
+    name?: string;
+}
+
+export interface ClicksToLinkResponse {
+    quantity?: number;
 }
 
 /**
  * Criar uma nova inscrição autônoma em um evento quando o userId não é informado, quando informado, a inscrição é feita por indicação
  */
-export const getCreateSubscriptionUrl = (prettyName: string,) => {
+export const getCreateSubscriptionUrl = (prettyName: string) => {
+    return `http://localhost:8080/subscription/${prettyName}`;
+};
 
+export const createSubscription = async (
+    prettyName: string,
+    user: User,
+    options?: RequestInit
+): Promise<SubscriptionResponse> => {
+    const res = await fetch(getCreateSubscriptionUrl(prettyName), {
+        ...options,
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...options?.headers },
+        body: JSON.stringify(user),
+    });
 
-  
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: SubscriptionResponse = body ? JSON.parse(body) : {};
 
-  return `http://localhost:8080/subscription/${prettyName}`
-}
-
-export const createSubscription = async (prettyName: string,
-    user: User, options?: RequestInit): Promise<SubscriptionResponse> => {
-  
-  const res = await fetch(getCreateSubscriptionUrl(prettyName),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      user,)
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: SubscriptionResponse = body ? JSON.parse(body) : {}
-
-  return data
-}
-
-
+    return data;
+};
 
 /**
  * Criar uma nova inscrição autônoma em um evento quando o userId não é informado, quando informado, a inscrição é feita por indicação
  */
-export const getCreateSubscription1Url = (prettyName: string,
-    userIndicatorId: number,) => {
+export const getCreateSubscription1Url = (prettyName: string, userIndicatorId: number) => {
+    return `http://localhost:8080/subscription/${prettyName}/${userIndicatorId}`;
+};
 
-
-  
-
-  return `http://localhost:8080/subscription/${prettyName}/${userIndicatorId}`
-}
-
-export const createSubscription1 = async (prettyName: string,
+export const createSubscription1 = async (
+    prettyName: string,
     userIndicatorId: number,
-    user: User, options?: RequestInit): Promise<SubscriptionResponse> => {
-  
-  const res = await fetch(getCreateSubscription1Url(prettyName,userIndicatorId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      user,)
-  }
-)
+    user: User,
+    options?: RequestInit
+): Promise<SubscriptionResponse> => {
+    const res = await fetch(getCreateSubscription1Url(prettyName, userIndicatorId), {
+        ...options,
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...options?.headers },
+        body: JSON.stringify(user),
+    });
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: SubscriptionResponse = body ? JSON.parse(body) : {}
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: SubscriptionResponse = body ? JSON.parse(body) : {};
 
-  return data
-}
-
-
+    return data;
+};
 
 /**
  * Buscar todos os eventos
  */
 export const getGetAllEventsUrl = () => {
+    return `http://localhost:8080/events`;
+};
 
+export const getAllEvents = async (options?: RequestInit): Promise<Event[]> => {
+    const res = await fetch(getGetAllEventsUrl(), {
+        ...options,
+        method: "GET",
+    });
 
-  
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: Event[] = body ? JSON.parse(body) : {};
 
-  return `http://localhost:8080/events`
-}
-
-export const getAllEvents = async ( options?: RequestInit): Promise<Event[]> => {
-  
-  const res = await fetch(getGetAllEventsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: Event[] = body ? JSON.parse(body) : {}
-
-  return data
-}
-
-
+    return data;
+};
 
 /**
  * Criar um novo evento
  */
 export const getAddNewEventUrl = () => {
-
-
-  
-
-  return `http://localhost:8080/events`
-}
+    return `http://localhost:8080/events`;
+};
 
 export const addNewEvent = async (newEventRequest: NewEventRequest, options?: RequestInit): Promise<Event> => {
-  
-  const res = await fetch(getAddNewEventUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      newEventRequest,)
-  }
-)
+    const res = await fetch(getAddNewEventUrl(), {
+        ...options,
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...options?.headers },
+        body: JSON.stringify(newEventRequest),
+    });
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: Event = body ? JSON.parse(body) : {}
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: Event = body ? JSON.parse(body) : {};
 
-  return data
-}
+    return data;
+};
 
+/**
+ * Buscar a quantidade de clicks de um link
+ */
+export const getGetClicksToLinkUrl = (prettyName: string, ownerId: number) => {
+    return `http://localhost:8080/clicks/${prettyName}/${ownerId}`;
+};
 
+export const getClicksToLink = async (
+    prettyName: string,
+    ownerId: number,
+    options?: RequestInit
+): Promise<ClicksToLinkResponse> => {
+    try {
+        const res = await fetch(getGetClicksToLinkUrl(prettyName, ownerId), {
+            ...options,
+            method: "GET",
+        });
+
+        const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+        const data: ClicksToLinkResponse = body ? JSON.parse(body) : {};
+        return data;
+    } catch (error) {
+        console.error(error);
+        return {};
+    }
+};
+
+/**
+ * Adicionar um click a um link
+ */
+export const getAddClickToLinkUrl = (prettyName: string, ownerId: number) => {
+    return `http://localhost:8080/clicks/${prettyName}/${ownerId}`;
+};
+
+export const addClickToLink = async (prettyName: string, ownerId: number, options?: RequestInit): Promise<string> => {
+    const res = await fetch(getAddClickToLinkUrl(prettyName, ownerId), {
+        ...options,
+        method: "POST",
+    });
+
+    if ([204, 205, 304].includes(res.status)) {
+        return ""; // Sem corpo na resposta
+    }
+
+    const contentType = res.headers.get("content-type");
+    const body = await res.text();
+
+    return contentType?.includes("application/json") ? JSON.parse(body) : body;
+};
 
 /**
  * Busca o ranking de indicações de um evento pelo seu pretty name
  */
-export const getGetSubscriptionRankingByEventUrl = (prettyName: string,) => {
+export const getGetSubscriptionRankingByEventUrl = (prettyName: string) => {
+    return `http://localhost:8080/subscription/${prettyName}/ranking`;
+};
 
+export const getSubscriptionRankingByEvent = async (
+    prettyName: string,
+    options?: RequestInit
+): Promise<SubscriptionRanking[]> => {
+    const res = await fetch(getGetSubscriptionRankingByEventUrl(prettyName), {
+        ...options,
+        method: "GET",
+    });
 
-  
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: SubscriptionRanking[] = body ? JSON.parse(body) : {};
 
-  return `http://localhost:8080/subscription/${prettyName}/ranking`
-}
-
-export const getSubscriptionRankingByEvent = async (prettyName: string, options?: RequestInit): Promise<SubscriptionRankingItem[]> => {
-  
-  const res = await fetch(getGetSubscriptionRankingByEventUrl(prettyName),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: SubscriptionRankingItem[] = body ? JSON.parse(body) : {}
-
-  return data
-}
-
-
+    return data;
+};
 
 /**
  * Busca a posição no ranking de incrições de um determinado usuário pelo seu id em um evento pelo seu pretty name
  */
-export const getGetSubscriptionRankingByUserUrl = (prettyName: string,
-    userId: number,) => {
+export const getGetSubscriptionRankingByUserUrl = (prettyName: string, userId: number) => {
+    return `http://localhost:8080/subscription/${prettyName}/ranking/${userId}`;
+};
 
+export const getSubscriptionRankingByUser = async (
+    prettyName: string,
+    userId: number,
+    options?: RequestInit
+): Promise<SubscriptionRankingItem> => {
+    try {
+        const res = await fetch(getGetSubscriptionRankingByUserUrl(prettyName, userId), {
+            ...options,
+            method: "GET",
+        });
 
-  
+        if (!res.ok) {
+            throw new Error(`Erro ao buscar ranking de inscrição: ${res.status} ${res.statusText}`);
+        }
 
-  return `http://localhost:8080/subscription/${prettyName}/ranking/${userId}`
-}
+        const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+        const data: SubscriptionRankingItem = body ? JSON.parse(body) : {};
 
-export const getSubscriptionRankingByUser = async (prettyName: string,
-    userId: number, options?: RequestInit): Promise<SubscriptionRankingItem> => {
-  
-  const res = await fetch(getGetSubscriptionRankingByUserUrl(prettyName,userId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: SubscriptionRankingItem = body ? JSON.parse(body) : {}
-
-  return data
-}
-
-
+        return data;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.error(`Erro na função getSubscriptionRankingByUser: ${error.message}`);
+        return {} as SubscriptionRankingItem; // Retorna um valor padrão ou lança a exceção
+    }
+};
 
 /**
  * Buscar um evento pelo seu pretty name
  */
-export const getGetByPrettynameUrl = (prettyName: string,) => {
-
-
-  
-
-  return `http://localhost:8080/events/${prettyName}`
-}
+export const getGetByPrettynameUrl = (prettyName: string) => {
+    return `http://localhost:8080/events/${prettyName}`;
+};
 
 export const getByPrettyname = async (prettyName: string, options?: RequestInit): Promise<Event> => {
-  
-  const res = await fetch(getGetByPrettynameUrl(prettyName),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
+    const res = await fetch(getGetByPrettynameUrl(prettyName), {
+        ...options,
+        method: "GET",
+    });
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: Event = body ? JSON.parse(body) : {}
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: Event = body ? JSON.parse(body) : {};
 
-  return data
-}
-
-
+    return data;
+};
 
 /**
  * Buscar os eventos criados por um determinado usuário
  */
-export const getGetAllMyEventsUrl = (email: string,) => {
-
-
-  
-
-  return `http://localhost:8080/events/myevents/${email}`
-}
+export const getGetAllMyEventsUrl = (email: string) => {
+    return `http://localhost:8080/events/myevents/${email}`;
+};
 
 export const getAllMyEvents = async (email: string, options?: RequestInit): Promise<Event[]> => {
-  
-  const res = await fetch(getGetAllMyEventsUrl(email),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
+    const res = await fetch(getGetAllMyEventsUrl(email), {
+        ...options,
+        method: "GET",
+    });
 
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text()
-  const data: Event[] = body ? JSON.parse(body) : {}
+    const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+    const data: Event[] = body ? JSON.parse(body) : {};
 
-  return data
-}
+    return data;
+};

@@ -3,16 +3,24 @@
 import { SubscriptionData, subscriptionSchema } from "@/_util/zod-schema-user";
 import Button from "@/app/_components/button";
 import { InputRoot, InputIcon, InputField } from "@/app/_components/input";
+import { createSubscription, createSubscription1 } from "@/http/your-event-backend";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User, Mail, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface SubscriptionFormProps {
     title: string;
     titleButton: string;
+    eventPrettyName: string;
+    indicatorId?: number;
 }
 
-const SubscriptionForm = ({ title, titleButton }: SubscriptionFormProps) => {
+const SubscriptionForm = ({ title, titleButton, eventPrettyName, indicatorId }: SubscriptionFormProps) => {
+    const [isSubmmit, setIsSubmiit] = useState(false);
+    const router = useRouter();
+
     const {
         register,
         handleSubmit,
@@ -21,8 +29,27 @@ const SubscriptionForm = ({ title, titleButton }: SubscriptionFormProps) => {
         resolver: zodResolver(subscriptionSchema),
     });
 
-    function onSubscribe(data: SubscriptionData) {
-        console.log(data);
+    async function onSubscribe({ name, email }: SubscriptionData) {
+        setIsSubmiit(true);
+        let subscription;
+
+        try {
+            if (!indicatorId) {
+                const { subscriptionNumber } = await createSubscription(eventPrettyName, { name, email });
+
+                subscription = subscriptionNumber;
+            } else {
+                const { subscriptionNumber } = await createSubscription1(eventPrettyName, Number(indicatorId), {
+                    name,
+                    email,
+                });
+                subscription = subscriptionNumber;
+            }
+
+            router.replace(`/invite/${eventPrettyName}/${subscription}`);
+        } catch (error) {
+            alert("Erro ao realizar inscrição" + error);
+        }
     }
 
     return (
@@ -55,7 +82,7 @@ const SubscriptionForm = ({ title, titleButton }: SubscriptionFormProps) => {
                 </div>
             </div>
 
-            <Button>
+            <Button disabled={isSubmmit}>
                 {titleButton} <ArrowRight />
             </Button>
         </form>

@@ -2,8 +2,10 @@
 
 import Button from "@/app/_components/button";
 import { InputRoot, InputIcon, InputField } from "@/app/_components/input";
+import { getAllMyEvents } from "@/http/your-event-backend";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -14,6 +16,7 @@ const emailSchema = z.object({
 type EmailData = z.infer<typeof emailSchema>;
 
 const InputEmailForm = () => {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -22,8 +25,15 @@ const InputEmailForm = () => {
         resolver: zodResolver(emailSchema),
     });
 
-    function onSubmit(data: EmailData) {
-        console.log(data);
+    async function onSubmit(data: EmailData) {
+        const events = await getAllMyEvents(data.email);
+
+        if (events.length === undefined) {
+            alert("Você não possui eventos criados");
+            return;
+        }
+
+        router.push(`/myevents/${data.email}`);
     }
 
     return (
