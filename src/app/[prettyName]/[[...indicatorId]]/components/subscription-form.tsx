@@ -5,7 +5,7 @@ import Button from "@/app/_components/button";
 import { InputRoot, InputIcon, InputField } from "@/app/_components/input";
 import { createSubscription, createSubscription1 } from "@/http/your-event-backend";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Mail, ArrowRight } from "lucide-react";
+import { User, Mail, ArrowRight, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -82,8 +82,16 @@ const SubscriptionForm = ({ title, titleButton, eventPrettyName, indicatorId }: 
                 </div>
             </div>
 
-            <Button disabled={isSubmmit}>
-                {titleButton} <ArrowRight />
+            <Button disabled={isSubmmit} className="text-gray-400">
+                {isSubmmit ? (
+                    <>
+                        {titleButton} <LoaderCircle className="animate-spin text-blue" />{" "}
+                    </>
+                ) : (
+                    <>
+                        {titleButton} <ArrowRight />
+                    </>
+                )}
             </Button>
         </form>
     );
