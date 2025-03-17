@@ -21,12 +21,7 @@ export default function Home() {
 
             <div className="flex flex-col md:flex-row gap-8 max-w-4xl">
                 <InputEmailForm />
-                <SubscriptionForm
-                    eventPrettyName=""
-                    indicatorId=""
-                    title="Criar evento"
-                    titleButton="Próximos passos"
-                />
+                <SubscriptionForm eventPrettyName="" title="Criar evento" titleButton="Próximos passos" />
             </div>
         </div>
     );

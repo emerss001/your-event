@@ -45,8 +45,8 @@ export interface Event {
     price?: number;
     startDate?: string;
     endDate?: string;
-    startTime?: LocalTime;
-    endTime?: LocalTime;
+    startTime?: string;
+    endTime?: string;
 }
 
 export interface SubscriptionRankingItem {
